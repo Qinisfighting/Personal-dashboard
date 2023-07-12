@@ -177,7 +177,7 @@ navigator.geolocation.getCurrentPosition(pos => {
         const data = await res.json()
         const iconURL = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
         console.log(data)
-        document.getElementById("weather").innerHTML = `<img id="icon" src=${iconURL}><h2>${Math.round(data.main.temp)}°C `
+        document.getElementById("weather").innerHTML = `<img src=${iconURL}><h2>${Math.round(data.main.temp)}°C `
         document.getElementById("location").textContent = `${data.name}`                                               
        
                                                        
