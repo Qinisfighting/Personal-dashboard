@@ -62,10 +62,15 @@ main {
   font-weight: 550;
 }
 
-.todo-form input:focus {
-    outline: none;   
+input:focus {
+    outline: none;  
+    
 }
-
+.checkbox-wrapper span {
+  padding: 3px;
+  outline: none;  
+  
+}
 .todo-form button {
   cursor: pointer;
 }
