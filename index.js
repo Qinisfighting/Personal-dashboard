@@ -195,7 +195,7 @@ navigator.geolocation.getCurrentPosition(pos => {
 
 async function getQuotes(){
   try{
-    const res = await fetch("https://github.com/Qinisfighting/Assets-for-all/blob/main/quotes.json")
+    const res = await fetch("https://raw.githubusercontent.com/Qinisfighting/Assets-for-all/main/quotes.json")
     const data = await res.json()
     let randomIndex = Math.floor(Math.random() * data.length);
     let quote = data[randomIndex]
