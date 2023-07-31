@@ -17,16 +17,16 @@ getCoins()
 
 //background
 async function setbackgroundImage(){
-    try{
-      const res = await fetch("https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature")
-      const data = await res.json()
-      const imgURL = data.urls.full
-      const imgAuthor = data.user.name
-      document.body.style.backgroundImage = `url(${imgURL})`;   
-      document.getElementById("img-author").innerHTML = `<p>Photographer: ${imgAuthor}</p>`
-    } catch(error) {
-        console.log("Fetch background IMG error -", error)
-    }   
+  try{
+    const res = await fetch("https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature")
+    const data = await res.json()
+    const imgURL = data.urls.full
+    const imgAuthor = data.user.name
+    document.body.style.backgroundImage = `url(${imgURL})`;   
+    document.getElementById("img-author").innerHTML = `<p>Photographer: ${imgAuthor}</p>`
+  } catch(error) {
+      console.log("Fetch background IMG error -", error)
+  }   
 } 
 setbackgroundImage()
 
@@ -40,153 +40,153 @@ const remainingTasks = document.querySelector(".remaining-tasks span");
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 if (localStorage.getItem("tasks")) {
-  tasks.map((task) => {
-    createTask(task);
-  });
+tasks.map((task) => {
+  createTask(task);
+});
 }
 
 // submit form
 todoForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const input = this.name;
-  const inputValue = input.value;
+e.preventDefault();
+const input = this.name;
+const inputValue = input.value;
 
-  if (inputValue != "") {
-    const task = {
-      id: new Date().getTime(),
-      name: inputValue,
-      isCompleted: false
-    };
+if (inputValue != "") {
+  const task = {
+    id: new Date().getTime(),
+    name: inputValue,
+    isCompleted: false
+  };
 
-    tasks.push(task);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    createTask(task);
-    todoForm.reset();
-  }
-  input.focus();
+  tasks.push(task);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  createTask(task);
+  todoForm.reset();
+}
+input.focus();
 });
 
 // remove task
 todoList.addEventListener("click", (e) => {
-  if (
-    e.target.classList.contains("remove-task") ||
-    e.target.parentElement.classList.contains("remove-task")
-  ) {
-    const taskId = e.target.closest("li").id;
-    removeTask(taskId);
-  }
+if (
+  e.target.classList.contains("remove-task") ||
+  e.target.parentElement.classList.contains("remove-task")
+) {
+  const taskId = e.target.closest("li").id;
+  removeTask(taskId);
+}
 });
 
 // update task - change status or name
 todoList.addEventListener("input", (e) => {
-  const taskId = e.target.closest("li").id;
-  updateTask(taskId, e.target);
+const taskId = e.target.closest("li").id;
+updateTask(taskId, e.target);
 });
 
 // prevent new lines with Enter
 todoList.addEventListener("keydown", function (e) {
-  if (e.keyCode === 13) {
-    e.preventDefault();
-  }
+if (e.keyCode === 13) {
+  e.preventDefault();
+}
 });
 
 // create task
 function createTask(task) {
-  const taskEl = document.createElement("li");
-  taskEl.setAttribute("id", task.id);
-  const taskElMarkup = `
-    <div class="checkbox-wrapper">
-      <input type="checkbox" id="${task.name}-${task.id}" name="tasks" ${
-    task.isCompleted ? "checked" : ""
-  }>
-      
-      <span ${!task.isCompleted ? "contenteditable" : ""}>${task.name}</span>
-    </div>
-    <button class="remove-task" title="Remove ${task.name} task">
-    ✖️
-    </button>
-  `;
-  taskEl.innerHTML = taskElMarkup;
-  todoList.appendChild(taskEl);
-  countTasks();
+const taskEl = document.createElement("li");
+taskEl.setAttribute("id", task.id);
+const taskElMarkup = `
+  <div class="checkbox-wrapper">
+    <input type="checkbox" id="${task.name}-${task.id}" name="tasks" ${
+  task.isCompleted ? "checked" : ""
+}>
+    
+    <span ${!task.isCompleted ? "contenteditable" : ""}>${task.name}</span>
+  </div>
+  <button class="remove-task" title="Remove ${task.name} task">
+  ✖️
+  </button>
+`;
+taskEl.innerHTML = taskElMarkup;
+todoList.appendChild(taskEl);
+countTasks();
 }
 
 // remove task
 function removeTask(taskId) {
-  tasks = tasks.filter((task) => task.id !== parseInt(taskId));
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  document.getElementById(taskId).remove();
-  countTasks();
+tasks = tasks.filter((task) => task.id !== parseInt(taskId));
+localStorage.setItem("tasks", JSON.stringify(tasks));
+document.getElementById(taskId).remove();
+countTasks();
 }
 
 // update task
 function updateTask(taskId, el) {
-  const task = tasks.find((task) => task.id === parseInt(taskId));
+const task = tasks.find((task) => task.id === parseInt(taskId));
 
-  if (el.hasAttribute("contentEditable")) {
-    task.name = el.textContent;
+if (el.hasAttribute("contentEditable")) {
+  task.name = el.textContent;
+} else {
+  const span = el.nextElementSibling.nextElementSibling;
+  task.isCompleted = !task.isCompleted;
+  if (task.isCompleted) {
+    span.removeAttribute("contenteditable");
+    el.setAttribute("checked", "");
   } else {
-    const span = el.nextElementSibling.nextElementSibling;
-    task.isCompleted = !task.isCompleted;
-    if (task.isCompleted) {
-      span.removeAttribute("contenteditable");
-      el.setAttribute("checked", "");
-    } else {
-      el.removeAttribute("checked");
-      span.setAttribute("contenteditable", "");
-    }
+    el.removeAttribute("checked");
+    span.setAttribute("contenteditable", "");
   }
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  countTasks();
+}
+localStorage.setItem("tasks", JSON.stringify(tasks));
+countTasks();
 }
 
 function countTasks() {
-  totalTasks.textContent = tasks.length;
-  const completedTasksArray = tasks.filter((task) => task.isCompleted === true);
-  completedTasks.textContent = completedTasksArray.length;
-  remainingTasks.textContent = tasks.length - completedTasksArray.length;
+totalTasks.textContent = tasks.length;
+const completedTasksArray = tasks.filter((task) => task.isCompleted === true);
+completedTasks.textContent = completedTasksArray.length;
+remainingTasks.textContent = tasks.length - completedTasksArray.length;
 }
 
 
 
 //time
 function getDateTime(){
-    const today = new Date()
-    const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-    const date = today.toLocaleDateString("de-DE", options)
-    const time = today.toLocaleTimeString("de-DE", {timeStyle: "medium"})
-    document.getElementById("time").innerHTML =`<h1>${time}</h1>
-                                                <p>${date}</p>`
+  const today = new Date()
+  const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+  const date = today.toLocaleDateString("de-DE", options)
+  const time = today.toLocaleTimeString("de-DE", {timeStyle: "medium"})
+  document.getElementById("time").innerHTML =`<h1>${time}</h1>
+                                              <p>${date}</p>`
 
 }
-   
+ 
 setInterval(getDateTime, 1000)
 
 //weather
 navigator.geolocation.getCurrentPosition(pos => {
-    async function getWeather(){
-        const APIKey = "b0c6dd1560b603095aed754d5d1756d0"
-        const APIUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${APIKey}&units=metric`
-      try{
-        const res =  await fetch(APIUrl)
-        const data = await res.json()
-        const iconURL = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-        console.log(data)
-        document.getElementById("weather").innerHTML = `<img src=${iconURL}><h2>${Math.round(data.main.temp)}°C `
-        document.getElementById("location").textContent = `${data.name}`                                               
-       
-                                                       
-      } catch (error) {
-        console.log("error", error);
-      } 
-            
+  async function getWeather(){
+      const APIKey = "b0c6dd1560b603095aed754d5d1756d0"
+      const APIUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${APIKey}&units=metric`
+    try{
+      const res =  await fetch(APIUrl)
+      const data = await res.json()
+      const iconURL = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+      console.log(data)
+      document.getElementById("weather").innerHTML = `<img src=${iconURL}><h2>${Math.round(data.main.temp)}°C `
+      document.getElementById("location").textContent = `${data.name}`                                               
+     
+                                                     
+    } catch (error) {
+      console.log("error", error);
     } 
-    getWeather()
+          
+  } 
+  getWeather()
 });
 
 
@@ -194,14 +194,14 @@ navigator.geolocation.getCurrentPosition(pos => {
 //quote
 
 async function getQuotes(){
-  try{
-    const res = await fetch("https://raw.githubusercontent.com/Qinisfighting/Assets-for-all/main/quotes.json")
-    const data = await res.json()
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const quote = data[randomIndex]
-    document.getElementById("quote").innerHTML=`<h3>" ${quote.q} "</h3><p> - ${quote.a}</p>` 
-  } catch(error) {
-      console.log("Fetch coin error -", error)
-  }   
+try{
+  const res = await fetch("https://raw.githubusercontent.com/Qinisfighting/Assets-for-all/main/quotes.json")
+  const data = await res.json()
+  let randomIndex = Math.floor(Math.random() * data.length);
+  let quote = data[randomIndex]
+  document.getElementById("quote").innerHTML=`<h3>${quote.q}</h3><p> - ${quote.a}</p>` 
+} catch(error) {
+    console.log("Fetch coin error -", error)
+}   
 } 
 getQuotes()
