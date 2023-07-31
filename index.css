@@ -148,8 +148,7 @@ input:focus {
     font-size: 2em;
     margin-top: 0;
     line-height: .7em;
-    padding: 0;
-        
+    padding: 0; 
 }
 
 
@@ -193,7 +192,7 @@ input:focus {
         display: none; 
     }
     #time {    
-        font-size: 1.2em;       
+        font-size: 1.2em;        
     }
     #quote {
         font-size: .8em; 

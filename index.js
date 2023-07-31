@@ -195,11 +195,11 @@ navigator.geolocation.getCurrentPosition(pos => {
 
 async function getQuotes(){
   try{
-    const res = await fetch("https://type.fit/api/quotes")
+    const res = await fetch("https://raw.githubusercontent.com/Qinisfighting/Assets-for-all/main/quotes.json")
     const data = await res.json()
-    let randomIndex = Math.floor(Math.random() * data.length);
-    let quote = data[randomIndex]
-    document.getElementById("quote").innerHTML=`<h3>${quote.text}</h3><p> - ${quote.author}</p>` 
+    const randomIndex = Math.floor(Math.random() * data.length);
+    const quote = data[randomIndex]
+    document.getElementById("quote").innerHTML=`<h3>" ${quote.q} "</h3><p> - ${quote.a}</p>` 
   } catch(error) {
       console.log("Fetch coin error -", error)
   }   
